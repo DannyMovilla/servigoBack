@@ -79,4 +79,12 @@ export class SupabaseService {
       );
     }
   }
+
+  async validateToken(token: string) {
+    const { data, error } = await this.supabase.auth.getUser(token);
+    if (error) {
+      return null;
+    }
+    return data.user;
+  }
 }
