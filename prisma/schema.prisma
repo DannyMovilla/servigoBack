@@ -1,0 +1,70 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Cliente {
+  id        String  @id @default(uuid())
+  nombre    String
+  email     String  @unique
+  ordenes   OrdenServicio[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Tecnico {
+  id        String  @id @default(uuid())
+  nombre    String
+  email     String  @unique
+  ordenes   OrdenServicio[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model OrdenServicio {
+  id         String  @id @default(uuid())
+  clienteId  String
+  tecnicoId  String?
+  cliente    Cliente @relation(fields: [clienteId], references: [id])
+  tecnico    Tecnico? @relation(fields: [tecnicoId], references: [id])
+  detalles   DetalleOrden[]
+  historial  HistorialEstado[]
+  notas      NotaArchivo[]
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model DetalleOrden {
+  id        String  @id @default(uuid())
+  ordenId   String
+  descripcion String
+  orden     OrdenServicio @relation(fields: [ordenId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model HistorialEstado {
+  id        String  @id @default(uuid())
+  ordenId   String
+  estado    String
+  orden     OrdenServicio @relation(fields: [ordenId], references: [id])
+  createdAt DateTime @default(now())
+}
+
+model NotaArchivo {
+  id        String  @id @default(uuid())
+  ordenId   String
+  url       String
+  orden     OrdenServicio @relation(fields: [ordenId], references: [id])
+  createdAt DateTime @default(now())
+}
