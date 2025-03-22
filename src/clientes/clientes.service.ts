@@ -2,8 +2,8 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateClienteDto } from './dto/create-cliente.dto';
 import { UpdateClienteDto } from './dto/update-cliente.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { Cliente } from '@prisma/client';
 import { SupabaseService } from 'src/supabase/supabase.service';
+import { Cliente } from './entities/cliente.entity';
 
 @Injectable()
 export class ClientesService {
